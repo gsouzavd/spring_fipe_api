@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class ClientModel {
    
@@ -26,6 +28,12 @@ public class ClientModel {
 		this.CPF = cPF;
 	}
     
+	public ClientModel(String email, String cPF) {
+		super();
+		this.email = email;
+		CPF = cPF;
+	}
+
 	public ClientModel(String name, String email, String cPF, String birthDate) {
 		super();
 		this.name = name;

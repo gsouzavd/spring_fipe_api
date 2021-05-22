@@ -11,7 +11,7 @@ import com.exemplo.demo.Model.ClientModel;
 public interface ClientService {
 	
 	public boolean checkClientUniqueness(ClientModel clientModel);
-	public ClientModel addUser(ClientModel clientModel) throws Exception;
-	
+	public boolean checkIfCPFExists(String CPF);
+	public ClientModel addUser(ClientModel clientModel) throws IllegalArgumentException;
 	
 }

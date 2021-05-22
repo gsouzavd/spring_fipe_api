@@ -25,7 +25,11 @@ public class ClientController {
 	
 	@Autowired
 	private CarSerice carService;
-	
+
+	// GET - Checks if the client already exists in the system
+	// @param - cpf - String - client CPF, format: nnn.nnn.nnn-nn
+	// @param - email - String - client e-mail
+	// @return - true if client exist, false if doesn't 
 	@GetMapping(value = "/client")
 	public HttpResponse getValidadeNewClient(@RequestBody ClientModel clientModel) {
 		try {
@@ -35,15 +39,23 @@ public class ClientController {
 		}
 	}
 	
+	// PUT - Add new client to the database
+	// @param - Client Model table values
+	// @returns - Informations added to the database
 	@PutMapping(value = "/client")
-	public HttpResponse putNewClient(@RequestBody ClientModel clientModel) {
+	public HttpResponse addNewClient(@RequestBody ClientModel clientModel) {
 		try {
 			return new HttpResponse(HttpStatus.CREATED, clientService.addUser(clientModel));
-		} catch (Exception ex) {
-			return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+		} catch(IllegalArgumentException ex) {
+			return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		}  catch (Exception ex) {
+			return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao adicionar usuário");
 		}
 	}
 	
+	// GET - Get FIPE system available car brands and codes
+	// @param - None
+	// @returns - FIPE brands and values
 	@GetMapping(value = "/car/brands")
 	public HttpResponse getCarBrands() {
 		try {
@@ -53,6 +65,9 @@ public class ClientController {
 		}
 	}
 	
+	// GET - Get FIPE system available car brands and codes
+	// @param - brand - FIPE brand code
+	// @returns - FIPE models and values
 	@GetMapping(value = "/car/models")
 	public HttpResponse getCarModels(@RequestBody CarModel carModel) {
 		try {
@@ -62,6 +77,10 @@ public class ClientController {
 		}
 	}
 	
+	// GET - Get FIPE system available car brands and codes
+	// @param - brand - FIPE brand code
+	// @param - model - FIPE model code
+	// @returns - FIPE model years and values
 	@GetMapping(value = "/car/years")
 	public HttpResponse getCarModelYears(@RequestBody CarModel carModel) {
 		try {	
@@ -71,6 +90,11 @@ public class ClientController {
 		}
 	}
 	
+	// GET - Get FIPE car information
+	// @param - brand - FIPE brand code
+	// @param - model - FIPE model code
+	// @param - year - FIPE year code
+	// @returns - FIPE car information
 	@GetMapping(value = "/car/information")
 	public HttpResponse getCarInformation(@RequestBody CarModel carModel) {
 		try {
@@ -81,6 +105,9 @@ public class ClientController {
 	}
 	
 	
+	// GET - List all cars from a client and its information
+	// @param - cpf - client CPF
+	// @returns - List of the client's FIPE car information and rotation
 	@GetMapping(value = "/car/client")
 	public HttpResponse getCarsFromClient(@RequestBody ClientModel clientModel) {
 		try {
@@ -90,11 +117,16 @@ public class ClientController {
 		}
 	}
 	
+	// PUT - Add new car to the client table
+	// @param - Car Model - information of the car table
+	// @returns - Car Model created on the system and it's and rotation
 	@PutMapping(value = "/car/client")
-	public HttpResponse getCarsFromClient(@RequestBody CarModel carModel) {
+	public HttpResponse addCarToClient(@RequestBody CarModel carModel) {
 		try {
 			return new HttpResponse(HttpStatus.CREATED, carService.addCarToClient(carModel));
-		} catch (Exception ex) {
+		} catch(IllegalArgumentException ex) {
+			return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		} catch(Exception ex) {
 			return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao adicionar carro");
 		}
 	}

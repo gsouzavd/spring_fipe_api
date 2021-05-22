@@ -16,16 +16,24 @@ public class ClientServiceImpl implements ClientService {
 	public boolean checkClientUniqueness(ClientModel clientModel) {
 		Long response = this.clientRepository.countClientsByCPFAndEmail(clientModel.getCPF(), clientModel.getEmail());
 		if (response > 0) {
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
-	public ClientModel addUser(ClientModel clientModel) throws Exception {
-		if (!this.checkClientUniqueness(clientModel)) {
-			throw new Exception("A user with this e-mail or CPF already exists");
+	public ClientModel addUser(ClientModel clientModel) throws IllegalArgumentException {
+		if (this.checkClientUniqueness(clientModel)) {
+			throw new IllegalArgumentException("A user with this e-mail or CPF already exists");
 		}
 		return this.clientRepository.save(clientModel);
+	}
+
+	@Override
+	public boolean checkIfCPFExists(String CPF) {
+		if (this.clientRepository.countClientsByCPF(CPF) > 0) {
+			return true;
+		}
+		return false;
 	}
 }

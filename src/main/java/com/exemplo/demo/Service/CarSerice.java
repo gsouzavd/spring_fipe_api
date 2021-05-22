@@ -25,5 +25,5 @@ public interface CarSerice {
 
 	public List<CarModel> getCarsFromClient(String CPF);
 	
-	public CarModel addCarToClient(CarModel carModel);
+	public CarModel addCarToClient(CarModel carModel) throws IllegalArgumentException;
 }
